@@ -1,0 +1,3 @@
+CREATE DATABASE "DbNhanSuVaChamCong";
+CREATE DATABASE "DbTinhLuong";
+CREATE DATABASE "DbQuyetDinh";

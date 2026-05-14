@@ -1,0 +1,6 @@
+@TinhLuongService_HostAddress = http://localhost:5091
+
+GET {{TinhLuongService_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

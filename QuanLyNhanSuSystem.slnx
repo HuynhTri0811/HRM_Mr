@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="ChamCongService/ChamCongService.csproj" />
+  <Project Path="QuanLyNhanSuMicroservice/QuanLyNhanSuMicroservice.csproj" />
+  <Project Path="QuyetDinhService/QuyetDinhService.csproj" />
+  <Project Path="TinhLuongService/TinhLuongService.csproj" />
+</Solution>
