@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using QuanLyNhanSuMicroservice.Core.Repositories;
-using QuanLyNhanSuMicroservice.QuanLyNhanVien.Application.DTOs;
+using QuanLyNhanSuMicroservice.QuanLyNhanVien.Application.Command.ChucVu;
 using QuanLyNhanSuMicroservice.QuanLyNhanVien.Application.UseCases;
 using QuanLyNhanSuMicroservice.QuanLyNhanVien.Domain.Entities;
 using QuanLyNhanSuMicroservice.QuanLyNhanVien.Domain.Repositories;

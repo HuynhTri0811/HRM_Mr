@@ -2,7 +2,7 @@ using MediatR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using QuanLyNhanSuMicroservice.QuanLyNhanVien.Domain.Repositories;
-using QuanLyNhanSuMicroservice.QuanLyNhanVien.Application.DTOs.Auth;
+using QuanLyNhanSuMicroservice.QuanLyNhanVien.Application.Command.Auth;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -23,7 +23,7 @@ namespace QuanLyNhanSuMicroservice.QuanLyNhanVien.Application.Handlers.AuthHandl
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(configuration["Jwt:Key"] ?? "SuperSecretKeyForJwtAuthenticationWhichIsVeryLong!123");
-            
+
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[]
@@ -55,7 +55,7 @@ namespace QuanLyNhanSuMicroservice.QuanLyNhanVien.Application.Handlers.AuthHandl
 
             var passwordHash = BCrypt.Net.BCrypt.HashPassword(request.Password);
             var newUser = new TaiKhoan(request.Username, passwordHash, request.Role ?? "User");
-            
+
             await repository.AddAsync(newUser);
             return true;
         }

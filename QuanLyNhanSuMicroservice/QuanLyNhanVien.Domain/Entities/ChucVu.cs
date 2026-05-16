@@ -1,3 +1,5 @@
+using QuanLyNhanSuMicroservice.QuanLyNhanVien.Domain.Entities.Base;
+
 namespace QuanLyNhanSuMicroservice.QuanLyNhanVien.Domain.Entities
 {
     public class ChucVu : ObjectBase

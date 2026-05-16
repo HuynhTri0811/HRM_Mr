@@ -2,8 +2,9 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using QuyetDinhService.Domain.Entities;
 using QuyetDinhService.QuyetDinhService.Application.Commands;
-using QuyetDinhService.QuyetDinhService.Application.Services;
+using QuyetDinhService.Domain.Repositories;
 using QuyetDinhService.QuyetDinhService.Domain.Repositories;
+using QuyetDinhService.QuyetDinhService.Application.Services;
 
 namespace QuyetDinhService.QuyetDinhService.Application.Handlers.QuyetDinhBoNhiemHandle
 {

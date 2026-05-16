@@ -1,6 +1,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using QuanLyNhanSuMicroservice.QuanLyNhanVien.Application.DTOs.Auth;
+using QuanLyNhanSuMicroservice.QuanLyNhanVien.Application.Command.Auth;
 
 namespace QuanLyNhanSuMicroservice.QuanLyNhanVien.API.Controllers
 {

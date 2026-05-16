@@ -1,10 +1,10 @@
 using MediatR;
 using QuanLyNhanSuMicroservice.Core.Repositories;
-using QuanLyNhanSuMicroservice.QuanLyNhanVien.Application.DTOs.NhanSu;
+using QuanLyNhanSuMicroservice.QuanLyNhanVien.Application.Command.NhanSu;
 using QuanLyNhanSuMicroservice.QuanLyNhanVien.Application.Queries;
-using QuanLyNhanSuMicroservice.QuanLyNhanVien.Application.DTOs.PhongBan;
-using QuanLyNhanSuMicroservice.QuanLyNhanVien.Application.DTOs.ChucVu;
-using QuanLyNhanSuMicroservice.QuanLyNhanVien.Application.DTOs.VanBang;
+using QuanLyNhanSuMicroservice.QuanLyNhanVien.Application.Command.PhongBan;
+using QuanLyNhanSuMicroservice.QuanLyNhanVien.Application.Command.ChucVu;
+using QuanLyNhanSuMicroservice.QuanLyNhanVien.Application.Command.VanBang;
 using QuanLyNhanSuMicroservice.QuanLyNhanVien.Domain.Repositories;
 using QuanLyNhanSuMicroservice.QuanLyNhanVien.Domain.Entities;
 

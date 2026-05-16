@@ -1,9 +1,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using QuanLyNhanSuMicroservice.QuanLyNhanVien.Application.DTOs;
-using QuanLyNhanSuMicroservice.QuanLyNhanVien.Application.DTOs.NhanSu;
-using QuanLyNhanSuMicroservice.QuanLyNhanVien.Application.DTOs.PhongBan;
+using QuanLyNhanSuMicroservice.QuanLyNhanVien.Application.Command.PhongBan;
 using QuanLyNhanSuMicroservice.QuanLyNhanVien.Application.Queries;
 using QuanLyNhanSuMicroservice.QuanLyNhanVien.Domain.Repositories;
 using QuanLyNhanSuMicroservice.QuanLyNhanVien.Infrastructure.Repositories;

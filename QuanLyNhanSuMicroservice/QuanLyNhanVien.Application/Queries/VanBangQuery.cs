@@ -1,5 +1,5 @@
 using MediatR;
-using QuanLyNhanSuMicroservice.QuanLyNhanVien.Application.DTOs.VanBang;
+using QuanLyNhanSuMicroservice.QuanLyNhanVien.Application.Command.VanBang;
 
 namespace QuanLyNhanSuMicroservice.QuanLyNhanVien.Application.Queries
 {

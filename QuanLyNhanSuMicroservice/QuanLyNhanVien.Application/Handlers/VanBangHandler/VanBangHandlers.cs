@@ -1,6 +1,6 @@
 using MediatR;
 using QuanLyNhanSuMicroservice.Core.Repositories;
-using QuanLyNhanSuMicroservice.QuanLyNhanVien.Application.DTOs.VanBang;
+using QuanLyNhanSuMicroservice.QuanLyNhanVien.Application.Command.VanBang;
 using QuanLyNhanSuMicroservice.QuanLyNhanVien.Application.Queries;
 using QuanLyNhanSuMicroservice.QuanLyNhanVien.Domain.Entities;
 using QuanLyNhanSuMicroservice.QuanLyNhanVien.Domain.Repositories;
@@ -36,7 +36,7 @@ namespace QuanLyNhanSuMicroservice.QuanLyNhanVien.Application.Handlers.VanBangHa
         }
     }
 
-    public class CreateVanBangHandler(IVanBangRepository repository,INhanVienRepository nhanVienRepository) : IRequestHandler<CreateVanBangDto, VanBangDto>
+    public class CreateVanBangHandler(IVanBangRepository repository, INhanVienRepository nhanVienRepository) : IRequestHandler<CreateVanBangDto, VanBangDto>
     {
         public async Task<VanBangDto> Handle(CreateVanBangDto request, CancellationToken cancellationToken)
         {

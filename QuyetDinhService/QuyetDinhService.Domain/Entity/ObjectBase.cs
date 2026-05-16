@@ -3,7 +3,7 @@ using QuyetDinhService.Domain.Entities.Interface;
 
 namespace QuyetDinhService.Domain.Entities
 {
-    public abstract class ObjectBase : IAuditable, IEntity, IDelete
+    public abstract class ObjectBase : AggregateRoot, IAuditable, IEntity, IDelete
     {
         public Guid Id { get; private set; }
         public DateTime CreatedAt { get; private set; }

@@ -1,5 +1,5 @@
 using MediatR;
-using QuanLyNhanSuMicroservice.QuanLyNhanVien.Application.DTOs.ChucVu;
+using QuanLyNhanSuMicroservice.QuanLyNhanVien.Application.Command.ChucVu;
 
 namespace QuanLyNhanSuMicroservice.QuanLyNhanVien.Application.Queries
 {

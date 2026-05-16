@@ -1,6 +1,6 @@
 using MediatR;
 using QuanLyNhanSuMicroservice.Core.Repositories;
-using QuanLyNhanSuMicroservice.QuanLyNhanVien.Application.DTOs.ChucVu;
+using QuanLyNhanSuMicroservice.QuanLyNhanVien.Application.Command.ChucVu;
 using QuanLyNhanSuMicroservice.QuanLyNhanVien.Application.Queries;
 using QuanLyNhanSuMicroservice.QuanLyNhanVien.Domain.Entities;
 

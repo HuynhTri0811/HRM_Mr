@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
-using QuanLyNhanSuMicroservice.QuanLyNhanVien.Domain.Entities   ;
+using QuanLyNhanSuMicroservice.QuanLyNhanVien.Domain.Entities;
 using QuanLyNhanSuMicroservice.QuanLyNhanVien.Domain.Entities.Interface;
 using System.Linq.Expressions;
 using System.Security.Claims;
@@ -68,10 +68,6 @@ namespace QuanLyNhanSuMicroservice.QuanLyNhanVien.Infrastructure.Persistence.Dat
                 if (entityEntry.State == EntityState.Added)
                 {
                     entity.UpdateBase(user);
-                }
-                else
-                {
-                    // Logic cho LastModified
                 }
             }
 

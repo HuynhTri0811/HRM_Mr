@@ -1,3 +1,4 @@
+using QuanLyNhanSuMicroservice.QuanLyNhanVien.Domain.Entities.Base;
 using System.Security;
 
 namespace QuanLyNhanSuMicroservice.QuanLyNhanVien.Domain.Entities

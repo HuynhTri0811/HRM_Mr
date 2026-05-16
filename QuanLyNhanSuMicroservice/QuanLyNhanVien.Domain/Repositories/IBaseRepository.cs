@@ -1,4 +1,6 @@
-﻿namespace QuanLyNhanSuMicroservice.QuanLyNhanVien.Domain.Repositories
+﻿using QuanLyNhanSuMicroservice.QuanLyNhanVien.Domain.Entities.Base;
+
+namespace QuanLyNhanSuMicroservice.QuanLyNhanVien.Domain.Repositories
 {
     public interface IBaseRepository<T> where T : ObjectBase
     {
