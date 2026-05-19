@@ -69,5 +69,40 @@ services:
       - postgres
     restart: always
 
+  api-gateway:
+    image: api-gateway
+    build:
+      context: .
+      dockerfile: ApiGateway/Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ReverseProxy__Clusters__nhansu-cluster__Destinations__destination1__Address=http://nhansu-api:8081
+      - ReverseProxy__Clusters__chamcong-cluster__Destinations__destination1__Address=http://chamcong-api:8083
+      - ReverseProxy__Clusters__quyetdinh-cluster__Destinations__destination1__Address=http://quyetdinh-api:8084
+      - ReverseProxy__Clusters__tinhluong-cluster__Destinations__destination1__Address=http://tinhluong-api:8082
+      - Serilog__WriteTo__1__Args__databaseUrl=mongodb://mongo:mongo@localhost:27017/HrmLogsDb
+    depends_on:
+      - nhansu-api
+      - chamcong-api
+      - quyetdinh-api
+      - tinhluong-api
+      - mongodb
+    restart: always
+
+  mongodb:
+    image: mongo:7.0
+    container_name: hrm-mongodb
+    ports:
+      - "27019:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=mongo
+      - MONGO_INITDB_ROOT_PASSWORD=mongo
+    volumes:
+      - mongodb-data:/data/db
+    restart: always
+
 volumes:
   postgres-data:
+  mongodb-data:
