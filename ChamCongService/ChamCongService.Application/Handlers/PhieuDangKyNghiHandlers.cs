@@ -7,6 +7,8 @@ using ChamCongService.Domain.Repositories;
 using Microsoft.AspNetCore.Http;
 using ChamCongService.Application.Services;
 using ChamCongService.Application.Mapping;
+using MassTransit;
+using ChamCongService.Application.Events;
 
 namespace ChamCongService.Application.Handlers
 {
@@ -14,7 +16,8 @@ namespace ChamCongService.Application.Handlers
         IPhieuDangKyNghiRepository repository,
         ILoaiChamCongRepository loaiChamCongRepository,
         INhanSuServiceClient nhanSuServiceClient,
-        IHttpContextAccessor httpContextAccessor
+        IHttpContextAccessor httpContextAccessor,
+        IPublishEndpoint publishEndpoint
     ) :
         IRequestHandler<CreatePhieuDangKyNghiCommand, Guid>,
         IRequestHandler<UpdatePhieuDangKyNghiCommand, bool>,
@@ -41,6 +44,17 @@ namespace ChamCongService.Application.Handlers
 
             await repository.AddAsync(phieu);
             await repository.SaveChangesAsync();
+
+            // Publish integration event to RabbitMQ
+            await publishEndpoint.Publish(new PhieuDangKyNghiCreatedEvent
+            {
+                Id = phieu.Id,
+                NgayNghi = phieu.NgayNghi,
+                LyDo = phieu.LyDo ?? string.Empty,
+                MaNhanVien = phieu.MaNhanVien,
+                LoaiChamCongId = phieu.LoaiChamCongId
+            }, cancellationToken);
+
             return phieu.Id;
         }
 

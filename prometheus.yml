@@ -1,0 +1,19 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: 'nhansu-api'
+    static_configs:
+      - targets: ['nhansu-api:8081']
+  - job_name: 'tinhluong-api'
+    static_configs:
+      - targets: ['tinhluong-api:8082']
+  - job_name: 'chamcong-api'
+    static_configs:
+      - targets: ['chamcong-api:8083']
+  - job_name: 'quyetdinh-api'
+    static_configs:
+      - targets: ['quyetdinh-api:8084']
+  - job_name: 'api-gateway'
+    static_configs:
+      - targets: ['api-gateway:8080']

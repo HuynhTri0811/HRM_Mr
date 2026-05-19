@@ -11,6 +11,11 @@ using Serilog;
 using MongoDB.Driver;
 using MongoDB.Bson;
 using ChamCongService.API.Filters;
+using ChamCongService.API.Filters;
+using MassTransit;
+using Prometheus;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -72,6 +77,18 @@ builder.Services.AddHttpClient<INhanSuServiceClient, NhanSuServiceClient>(client
     client.BaseAddress = new Uri(builder.Configuration["NhanSuApiUrl"] ?? "http://nhansu-api:8081");
 });
 
+builder.Services.AddMassTransit(x =>
+{
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.Host(builder.Configuration["RabbitMQ:Host"] ?? "localhost", "/", h =>
+        {
+            h.Username(builder.Configuration["RabbitMQ:Username"] ?? "guest");
+            h.Password(builder.Configuration["RabbitMQ:Password"] ?? "guest");
+        });
+    });
+});
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -91,6 +108,20 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+builder.Services.AddOpenTelemetry()
+    .ConfigureResource(resource => resource.AddService("ChamCongService"))
+    .WithTracing(tracing =>
+    {
+        tracing
+            .AddAspNetCoreInstrumentation()
+            .AddHttpClientInstrumentation()
+            .AddSource("MassTransit")
+            .AddOtlpExporter(opt =>
+            {
+                opt.Endpoint = new Uri(builder.Configuration["Otlp:Endpoint"] ?? "http://localhost:4317");
+            });
+    });
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -108,7 +139,10 @@ using (var scope = app.Services.CreateScope())
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseHttpMetrics();
 app.MapControllers();
+app.MapMetrics();
 
 try
 {

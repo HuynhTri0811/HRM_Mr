@@ -13,6 +13,9 @@ using Serilog;
 using MongoDB.Driver;
 using MongoDB.Bson;
 using TinhLuongService.API.Filters;
+using Prometheus;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -95,6 +98,20 @@ builder.Services.AddAuthentication(options =>
     };
 });
 
+builder.Services.AddOpenTelemetry()
+    .ConfigureResource(resource => resource.AddService("TinhLuongService"))
+    .WithTracing(tracing =>
+    {
+        tracing
+            .AddAspNetCoreInstrumentation()
+            .AddHttpClientInstrumentation()
+            // .AddSource("MassTransit") // TinhLuong doesn't use MassTransit yet based on its code, but it's safe to add if it ever does. I'll omit it since MassTransit using is not at the top. Wait, let's just add it just in case, it doesn't hurt. No, better to omit if MassTransit is not installed.
+            .AddOtlpExporter(opt =>
+            {
+                opt.Endpoint = new Uri(builder.Configuration["Otlp:Endpoint"] ?? "http://localhost:4317");
+            });
+    });
+
 var app = builder.Build();
 
 try
@@ -131,5 +148,8 @@ using (var scope = app.Services.CreateScope())
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseHttpMetrics();
 app.MapControllers();
+app.MapMetrics();
 app.Run();

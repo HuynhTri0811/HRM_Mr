@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 
-namespace TinhLuongService.API.Filters
+namespace QuanLyNhanSuMicroservice.QuanLyNhanVien.API.Filters
 {
     public class ResponseLoggingFilter(ILogger<ResponseLoggingFilter> logger) : IAsyncActionFilter
     {
@@ -20,23 +20,23 @@ namespace TinhLuongService.API.Filters
             {
                 if (resultContext.Result is ObjectResult objectResult)
                 {
-                    logger.LogInformation("TinhLuongService Trả về dữ liệu thành công! [{Method}] {Path} - Trả về: {@ResponseData}",
+                    logger.LogInformation("QuanLyNhanSuMicroservice Trả về dữ liệu thành công! [{Method}] {Path} - Trả về: {@ResponseData}",
                         method, path, objectResult.Value);
                 }
                 else if (resultContext.Result is StatusCodeResult statusCodeResult)
                 {
-                    logger.LogInformation("TinhLuongService Trả về mã trạng thái thành công [{Method}] {Path} - Trả về mã trạng thái: {StatusCode}",
+                    logger.LogInformation("QuanLyNhanSuMicroservice Trả về mã trạng thái thành công [{Method}] {Path} - Trả về mã trạng thái: {StatusCode}",
                         method, path, statusCodeResult.StatusCode);
                 }
                 else if (resultContext.Result is NoContentResult)
                 {
-                    logger.LogInformation("TinhLuongService [{Method}] {Path} - Trả về NoContent",
+                    logger.LogInformation("QuanLyNhanSuMicroservice [{Method}] {Path} - Trả về NoContent",
                         method, path);
                 }
             }
             else
             {
-                logger.LogError(resultContext.Exception, "TinhLuongService [{Method}] {Path} - Gặp lỗi trong quá trình xử lý",
+                logger.LogError(resultContext.Exception, "QuanLyNhanSuMicroservice [{Method}] {Path} - Gặp lỗi trong quá trình xử lý",
                     method, path);
             }
         }

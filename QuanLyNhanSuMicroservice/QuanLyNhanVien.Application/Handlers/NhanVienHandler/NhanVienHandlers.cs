@@ -7,6 +7,8 @@ using QuanLyNhanSuMicroservice.QuanLyNhanVien.Application.Command.ChucVu;
 using QuanLyNhanSuMicroservice.QuanLyNhanVien.Application.Command.VanBang;
 using QuanLyNhanSuMicroservice.QuanLyNhanVien.Domain.Repositories;
 using QuanLyNhanSuMicroservice.QuanLyNhanVien.Domain.Entities;
+using MassTransit;
+using QuanLyNhanSuMicroservice.QuanLyNhanVien.Application.Events;
 
 namespace QuanLyNhanSuMicroservice.QuanLyNhanVien.Application.Handlers.NhanVienHandler
 {
@@ -56,7 +58,8 @@ namespace QuanLyNhanSuMicroservice.QuanLyNhanVien.Application.Handlers.NhanVienH
     public class CreateNhanVienHandler(
         INhanVienRepository repository,
         IPhongBanRepository phongBanRepository,
-        IChucVuRepository chucVuRepository
+        IChucVuRepository chucVuRepository,
+        IPublishEndpoint publishEndpoint
     ) : IRequestHandler<CreateNhanVienDto, Guid>
     {
         public async Task<Guid> Handle(CreateNhanVienDto request, CancellationToken cancellationToken)
@@ -94,6 +97,21 @@ namespace QuanLyNhanSuMicroservice.QuanLyNhanVien.Application.Handlers.NhanVienH
 
 
             await repository.AddAsync(employee);
+            await repository.SaveChangesAsync();
+
+            // Publish integration event to RabbitMQ
+            await publishEndpoint.Publish(new NhanVienCreatedEvent
+            {
+                Id = employee.Id,
+                MaNhanVien = employee.MaNhanVien ?? string.Empty,
+                TenNhanVien = employee.TenNhanVien ?? string.Empty,
+                NgaySinh = employee.NgaySinh,
+                GioiTinh = employee.GioiTinh ?? string.Empty,
+                Email = employee.Email ?? string.Empty,
+                LuongCoBan = employee.LuongCoBan,
+                PhuCap = employee.PhuCap
+            }, cancellationToken);
+
             return employee.Id;
         }
     }

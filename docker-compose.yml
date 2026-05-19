@@ -26,8 +26,12 @@ services:
       - "8081:8081"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - Serilog__WriteTo__1__Args__databaseUrl=mongodb://mongo:mongo@mongodb:27017/HrmLogsDb?authSource=admin
+      - RabbitMQ__Host=rabbitmq
+      - Otlp__Endpoint=http://jaeger:4317
     depends_on:
       - postgres
+      - rabbitmq
     restart: always
 
   tinhluong-api:
@@ -40,6 +44,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - Serilog__WriteTo__1__Args__databaseUrl=mongodb://mongo:mongo@mongodb:27017/HrmLogsDb?authSource=admin
+      - Otlp__Endpoint=http://jaeger:4317
     depends_on:
       - postgres
     restart: always
@@ -54,8 +59,11 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - Serilog__WriteTo__1__Args__databaseUrl=mongodb://mongo:mongo@mongodb:27017/HrmLogsDb?authSource=admin
+      - RabbitMQ__Host=rabbitmq
+      - Otlp__Endpoint=http://jaeger:4317
     depends_on:
       - postgres
+      - rabbitmq
     restart: always
 
   quyetdinh-api:
@@ -68,8 +76,11 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - Serilog__WriteTo__1__Args__databaseUrl=mongodb://mongo:mongo@mongodb:27017/HrmLogsDb?authSource=admin
+      - RabbitMQ__Host=rabbitmq
+      - Otlp__Endpoint=http://jaeger:4317
     depends_on:
       - postgres
+      - rabbitmq
     restart: always
 
   api-gateway:
@@ -86,6 +97,7 @@ services:
       - ReverseProxy__Clusters__quyetdinh-cluster__Destinations__destination1__Address=http://quyetdinh-api:8084
       - ReverseProxy__Clusters__tinhluong-cluster__Destinations__destination1__Address=http://tinhluong-api:8082
       - Serilog__WriteTo__1__Args__databaseUrl=mongodb://mongo:mongo@mongodb:27017/HrmLogsDb?authSource=admin
+      - Otlp__Endpoint=http://jaeger:4317
     depends_on:
       - nhansu-api
       - chamcong-api
@@ -104,6 +116,46 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=mongo
     volumes:
       - mongodb-data:/data/db
+    restart: always
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    restart: always
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    restart: always
+
+  grafana:
+    image: grafana/grafana-enterprise:latest
+    container_name: grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    depends_on:
+      - prometheus
+    restart: always
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    container_name: jaeger
+    ports:
+      - "16686:16686"
+      - "4317:4317"
+      - "4318:4318"
     restart: always
 
 volumes:

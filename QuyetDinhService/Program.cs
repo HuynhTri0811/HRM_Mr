@@ -10,6 +10,10 @@ using Serilog;
 using MongoDB.Driver;
 using MongoDB.Bson;
 using QuyetDinhService.API.Filters;
+using MassTransit;
+using Prometheus;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -83,12 +87,38 @@ builder.Services.AddHttpClient<INhanSuServiceClient, NhanSuServiceClient>(client
     client.BaseAddress = new Uri(builder.Configuration["NhanSuApiUrl"] ?? "http://nhansu-api:8081");
 });
 
+builder.Services.AddMassTransit(x =>
+{
+    x.UsingRabbitMq((context, cfg) =>
+    {
+        cfg.Host(builder.Configuration["RabbitMQ:Host"] ?? "localhost", "/", h =>
+        {
+            h.Username(builder.Configuration["RabbitMQ:Username"] ?? "guest");
+            h.Password(builder.Configuration["RabbitMQ:Password"] ?? "guest");
+        });
+    });
+});
+
 // Register Repositories
 builder.Services.AddScoped<IQuyetDinhNangLuongRepositoris, QuyetDinhNangLuongRepository>();
 builder.Services.AddScoped<IQuyetDinhBoNhiemRepository, QuyetDinhBoNhiemRepository>();
 
 // Register MediatR
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
+
+builder.Services.AddOpenTelemetry()
+    .ConfigureResource(resource => resource.AddService("QuyetDinhService"))
+    .WithTracing(tracing =>
+    {
+        tracing
+            .AddAspNetCoreInstrumentation()
+            .AddHttpClientInstrumentation()
+            .AddSource("MassTransit")
+            .AddOtlpExporter(opt =>
+            {
+                opt.Endpoint = new Uri(builder.Configuration["Otlp:Endpoint"] ?? "http://localhost:4317");
+            });
+    });
 
 var app = builder.Build();
 
@@ -126,5 +156,8 @@ using (var scope = app.Services.CreateScope())
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseHttpMetrics();
 app.MapControllers();
+app.MapMetrics();
 app.Run();

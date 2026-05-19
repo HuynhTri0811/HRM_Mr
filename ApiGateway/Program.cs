@@ -5,6 +5,10 @@ using ApiGateway.Middlewares;
 using Serilog;
 using MongoDB.Driver;
 using MongoDB.Bson;
+using Prometheus;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
+using Prometheus;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -60,8 +64,22 @@ var pipeline = new ResiliencePipelineBuilder<HttpResponseMessage>()
 
 builder.Services.AddSingleton<IForwarderHttpClientFactory>(new ResilientForwarderHttpClientFactory(pipeline));
 
+builder.Services.AddOpenTelemetry()
+    .ConfigureResource(resource => resource.AddService("ApiGateway"))
+    .WithTracing(tracing =>
+    {
+        tracing
+            .AddAspNetCoreInstrumentation()
+            .AddHttpClientInstrumentation()
+            .AddOtlpExporter(opt =>
+            {
+                opt.Endpoint = new Uri(builder.Configuration["Otlp:Endpoint"] ?? "http://localhost:4317");
+            });
+    });
+
 var app = builder.Build();
 app.UseRouting();
+app.UseHttpMetrics();
 app.UseMiddleware<GatewayLoggingMiddleware>();
 app.UseSwagger();
 app.UseSwaggerUI(options =>
@@ -128,6 +146,7 @@ app.MapGet("/swagger/{service}/v1/swagger.json", async (string service, HttpClie
 
 // Ánh xạ các tuyến đường của Reverse Proxy YARP
 app.MapReverseProxy();
+app.MapMetrics();
 
 try
 {
