@@ -3,6 +3,8 @@ using Polly;
 using Yarp.ReverseProxy.Forwarder;
 using ApiGateway.Middlewares;
 using Serilog;
+using MongoDB.Driver;
+using MongoDB.Bson;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -129,13 +131,39 @@ app.MapReverseProxy();
 
 try
 {
-    Log.Information("123213312231");
+    Log.Information("Ứng dụng API Gateway đang khởi động...");
+
+    // Kiểm tra kết nối MongoDB (sử dụng cấu hình từ Serilog)
+    try
+    {
+        var mongoUrlStr = builder.Configuration["Serilog:WriteTo:1:Args:databaseUrl"];
+        if (!string.IsNullOrEmpty(mongoUrlStr))
+        {
+            var mongoUrl = new MongoUrl(mongoUrlStr);
+            var settings = MongoClientSettings.FromUrl(mongoUrl);
+            settings.ServerSelectionTimeout = TimeSpan.FromSeconds(3); // Giới hạn thời gian kết nối là 3 giây để tránh làm nghẽn quá trình khởi chạy nếu MongoDB bị offline
+
+            var client = new MongoClient(settings);
+            // Thực hiện lệnh ping để xác nhận kết nối thực tế tới MongoDB
+            await client.GetDatabase(mongoUrl.DatabaseName ?? "HrmLogsDb").RunCommandAsync((Command<BsonDocument>)"{ping:1}");
+            Log.Information("Kết nối thành công đến MongoDB ({DatabaseName}). Sẵn sàng ghi nhận traffic log.", mongoUrl.DatabaseName);
+        }
+        else
+        {
+            Log.Warning("Không tìm thấy cấu hình connection string của MongoDB trong Serilog.");
+        }
+    }
+    catch (Exception ex)
+    {
+        Log.Error(ex, "Không thể kết nối đến cơ sở dữ liệu MongoDB. Vui lòng kiểm tra trạng thái Docker Container.");
+    }
+
     app.Run();
 }
 catch (Exception ex)
 {
     // Phòng trường hợp YARP cấu hình sai file json gây crash ứng dụng khi start
-    Log.Fatal(ex, "ấdsadsdsadasd");
+    Log.Fatal(ex, "Ứng dụng API Gateway gặp lỗi nghiêm trọng khi khởi động.");
 }
 finally
 {

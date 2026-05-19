@@ -7,10 +7,24 @@ using ChamCongService.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Serilog;
+using MongoDB.Driver;
+using MongoDB.Bson;
+using ChamCongService.API.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllers();
+Log.Logger = new LoggerConfiguration()
+    .ReadFrom.Configuration(builder.Configuration)
+    .Enrich.FromLogContext()
+    .CreateLogger();
+
+builder.Host.UseSerilog();
+
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add<ResponseLoggingFilter>();
+});
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -95,4 +109,57 @@ using (var scope = app.Services.CreateScope())
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();
-app.Run();
+
+try
+{
+    Log.Information("Ứng dụng ChamCongService đang khởi động...");
+
+    // Kiểm tra kết nối MongoDB (sử dụng cấu hình từ Serilog)
+    try
+    {
+        string? mongoUrlStr = null;
+        var writeToSection = builder.Configuration.GetSection("Serilog:WriteTo");
+        foreach (var child in writeToSection.GetChildren())
+        {
+            if (child["Name"] == "MongoDB")
+            {
+                mongoUrlStr = child["Args:databaseUrl"];
+                break;
+            }
+        }
+        if (string.IsNullOrEmpty(mongoUrlStr))
+        {
+            mongoUrlStr = builder.Configuration["Serilog:WriteTo:1:Args:databaseUrl"];
+        }
+
+        if (!string.IsNullOrEmpty(mongoUrlStr))
+        {
+            var mongoUrl = new MongoUrl(mongoUrlStr);
+            var settings = MongoClientSettings.FromUrl(mongoUrl);
+            settings.ServerSelectionTimeout = TimeSpan.FromSeconds(3); // Giới hạn thời gian kết nối là 3 giây để tránh làm nghẽn quá trình khởi chạy nếu MongoDB bị offline
+
+            var client = new MongoClient(settings);
+            // Thực hiện lệnh ping để xác nhận kết nối thực tế tới MongoDB
+            await client.GetDatabase(mongoUrl.DatabaseName ?? "HrmLogsDb").RunCommandAsync((Command<BsonDocument>)"{ping:1}");
+            Log.Information("Kết nối thành công đến MongoDB ({DatabaseName}). Sẵn sàng ghi nhận traffic log.", mongoUrl.DatabaseName);
+        }
+        else
+        {
+            Log.Warning("Không tìm thấy cấu hình connection string của MongoDB trong Serilog.");
+        }
+    }
+    catch (Exception ex)
+    {
+        Log.Error(ex, "Không thể kết nối đến cơ sở dữ liệu MongoDB. Vui lòng kiểm tra trạng thái Docker Container.");
+    }
+
+    app.Run();
+}
+catch (Exception ex)
+{
+    Log.Fatal(ex, "Ứng dụng ChamCongService gặp lỗi nghiêm trọng khi khởi động.");
+}
+finally
+{
+    Log.CloseAndFlush();
+}

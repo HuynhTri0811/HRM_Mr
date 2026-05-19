@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using ChamCongService.Application.Commands;
 using ChamCongService.Application.DTOs;
 using ChamCongService.Application.Query;
-
 using Microsoft.AspNetCore.Authorization;
 
 namespace ChamCongService.API.Controllers

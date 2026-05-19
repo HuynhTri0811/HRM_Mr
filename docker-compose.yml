@@ -39,6 +39,7 @@ services:
       - "8082:8082"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - Serilog__WriteTo__1__Args__databaseUrl=mongodb://mongo:mongo@mongodb:27017/HrmLogsDb?authSource=admin
     depends_on:
       - postgres
     restart: always
@@ -52,6 +53,7 @@ services:
       - "8083:8083"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - Serilog__WriteTo__1__Args__databaseUrl=mongodb://mongo:mongo@mongodb:27017/HrmLogsDb?authSource=admin
     depends_on:
       - postgres
     restart: always
@@ -65,6 +67,7 @@ services:
       - "8084:8084"
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
+      - Serilog__WriteTo__1__Args__databaseUrl=mongodb://mongo:mongo@mongodb:27017/HrmLogsDb?authSource=admin
     depends_on:
       - postgres
     restart: always
@@ -82,7 +85,7 @@ services:
       - ReverseProxy__Clusters__chamcong-cluster__Destinations__destination1__Address=http://chamcong-api:8083
       - ReverseProxy__Clusters__quyetdinh-cluster__Destinations__destination1__Address=http://quyetdinh-api:8084
       - ReverseProxy__Clusters__tinhluong-cluster__Destinations__destination1__Address=http://tinhluong-api:8082
-      - Serilog__WriteTo__1__Args__databaseUrl=mongodb://mongo:mongo@localhost:27017/HrmLogsDb
+      - Serilog__WriteTo__1__Args__databaseUrl=mongodb://mongo:mongo@mongodb:27017/HrmLogsDb?authSource=admin
     depends_on:
       - nhansu-api
       - chamcong-api
@@ -93,9 +96,9 @@ services:
 
   mongodb:
     image: mongo:7.0
-    container_name: hrm-mongodb
+    container_name: mongodb
     ports:
-      - "27019:27017"
+      - "27017:27017"
     environment:
       - MONGO_INITDB_ROOT_USERNAME=mongo
       - MONGO_INITDB_ROOT_PASSWORD=mongo
