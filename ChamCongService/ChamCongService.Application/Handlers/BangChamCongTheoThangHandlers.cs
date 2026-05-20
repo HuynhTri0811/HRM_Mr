@@ -29,7 +29,7 @@ namespace ChamCongService.Application.Handlers
             var entity = await repository.GetByIdAsync(request.Id);
             if (entity == null) return false;
             entity.CapNhat(request.Thang, request.Nam, request.TuNgay, request.DenNgay);
-            await repository.UpdateAsync(entity);
+            await repository.UpdateAsync(entity, request.UpdatedAt);
             await repository.SaveChangesAsync();
             return true;
         }
@@ -48,7 +48,7 @@ namespace ChamCongService.Application.Handlers
             var entity = await repository.GetByIdAsync(request.Id);
             if (entity == null) return false;
             entity.ChotBangCong();
-            await repository.UpdateAsync(entity);
+            await repository.UpdateAsync(entity, request.UpdatedAt);
             await repository.SaveChangesAsync();
             return true;
         }
@@ -58,7 +58,7 @@ namespace ChamCongService.Application.Handlers
             var entity = await repository.GetByIdAsync(request.Id);
             if (entity == null) return false;
             entity.MoChotBangCong();
-            await repository.UpdateAsync(entity);
+            await repository.UpdateAsync(entity, request.UpdatedAt);
             await repository.SaveChangesAsync();
             return true;
         }
@@ -66,14 +66,14 @@ namespace ChamCongService.Application.Handlers
         public async Task<IEnumerable<BangChamCongTheoThangDto>> Handle(GetAllBangChamCongTheoThangQuery request, CancellationToken cancellationToken)
         {
             var result = await repository.GetAllAsync();
-            return result.Where(x => x != null).Select(x => new BangChamCongTheoThangDto(x!.Id, x.Thang, x.Nam, x.TuNgay, x.DenNgay, x.IsChot));
+            return result.Where(x => x != null).Select(x => new BangChamCongTheoThangDto(x!.Id, x.Thang, x.Nam, x.TuNgay, x.DenNgay, x.IsChot, x.UpdatedAt));
         }
 
         public async Task<BangChamCongTheoThangDto?> Handle(GetBangChamCongTheoThangByIdQuery request, CancellationToken cancellationToken)
         {
             var x = await repository.GetByIdAsync(request.Id);
             if (x == null) return null;
-            return new BangChamCongTheoThangDto(x.Id, x.Thang, x.Nam, x.TuNgay, x.DenNgay, x.IsChot);
+            return new BangChamCongTheoThangDto(x.Id, x.Thang, x.Nam, x.TuNgay, x.DenNgay, x.IsChot, x.UpdatedAt);
         }
     }
 }

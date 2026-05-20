@@ -74,7 +74,7 @@ namespace ChamCongService.Application.Handlers
                 // Since I used private set and no update method yet, I'll just skip for now or add them.
             }
 
-            await repository.UpdateAsync(phieu);
+            await repository.UpdateAsync(phieu, request.UpdatedAt);
             await repository.SaveChangesAsync();
             return true;
         }

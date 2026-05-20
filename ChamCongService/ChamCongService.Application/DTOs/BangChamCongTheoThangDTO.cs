@@ -6,6 +6,7 @@ namespace ChamCongService.Application.DTOs
         int Nam,
         DateTime TuNgay,
         DateTime DenNgay,
-        bool IsChot
+        bool IsChot,
+        DateTime UpdatedAt
     );
 }

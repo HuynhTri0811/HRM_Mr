@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using ChamCongService.Domain.Entity;
 using ChamCongService.Domain.Entity.Interface;
+using ChamCongService.Domain.Entity.Base;
 using ChamCongService.Common;
 
 namespace ChamCongService.ChamCongService.Infrastructure.Data
@@ -37,6 +38,14 @@ namespace ChamCongService.ChamCongService.Infrastructure.Data
                 if (typeof(IDelete).IsAssignableFrom(entityType.ClrType) && entityType.BaseType == null)
                 {
                     modelBuilder.Entity(entityType.ClrType).HasQueryFilter(ConvertFilterExpression(entityType.ClrType));
+                }
+
+                // Cấu hình concurrency token dựa trên UpdatedAt
+                if (typeof(ObjectBase).IsAssignableFrom(entityType.ClrType))
+                {
+                    modelBuilder.Entity(entityType.ClrType)
+                        .Property(nameof(ObjectBase.UpdatedAt))
+                        .IsConcurrencyToken();
                 }
             }
         }

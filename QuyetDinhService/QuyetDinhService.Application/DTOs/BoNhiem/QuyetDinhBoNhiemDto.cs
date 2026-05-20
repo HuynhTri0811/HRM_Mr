@@ -13,5 +13,6 @@ namespace QuyetDinhService.QuyetDinhService.Application.DTOs.BoNhiem
         Guid ChucVuMoi, 
         decimal PhuCapCu, 
         decimal PhuCapMoi, 
-        string LyDo);
+        string LyDo,
+        DateTime UpdatedAt);
 }

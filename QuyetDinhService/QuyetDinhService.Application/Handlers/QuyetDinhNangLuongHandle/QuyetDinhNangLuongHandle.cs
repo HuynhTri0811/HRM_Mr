@@ -30,7 +30,8 @@ namespace QuyetDinhService.QuyetDinhService.Application.Handlers.QuyetDinhNangLu
                     qd.GhiChu ?? string.Empty,
                     nhanVien!,
                     qd.LuongCoBanCu,
-                    qd.LuongCoBanMoi);
+                    qd.LuongCoBanMoi,
+                    qd.UpdatedAt);
             });
 
             return await Task.WhenAll(tasks);

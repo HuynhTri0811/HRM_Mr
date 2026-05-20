@@ -53,25 +53,25 @@ namespace TinhLuongService.API.Controllers
         }
 
         [HttpPatch("{id}/khoa")]
-        public async Task<ActionResult> Khoa(Guid id)
+        public async Task<ActionResult> Khoa(Guid id, [FromQuery] DateTime updatedAt)
         {
-            var result = await mediator.Send(new KhoaKyTinhLuongCommand(id));
+            var result = await mediator.Send(new KhoaKyTinhLuongCommand(id, updatedAt));
             if (!result) return NotFound();
             return Ok(new { message = "Đã khóa kỳ tính lương" });
         }
 
         [HttpPatch("{id}/mo")]
-        public async Task<ActionResult> Mo(Guid id)
+        public async Task<ActionResult> Mo(Guid id, [FromQuery] DateTime updatedAt)
         {
-            var result = await mediator.Send(new MoKyTinhLuongCommand(id));
+            var result = await mediator.Send(new MoKyTinhLuongCommand(id, updatedAt));
             if (!result) return NotFound();
             return Ok(new { message = "Đã mở kỳ tính lương" });
         }
 
         [HttpPatch("{id}/tinhluong")]
-        public async Task<ActionResult> TinhLuong(Guid id)
+        public async Task<ActionResult> TinhLuong(Guid id, [FromQuery] DateTime updatedAt)
         {
-            var result = await mediator.Send(new TinhLuongCommand(id));
+            var result = await mediator.Send(new TinhLuongCommand(id, updatedAt));
             if (!result) return NotFound();
             return Ok(new { message = "Đã tính lương" });
         }

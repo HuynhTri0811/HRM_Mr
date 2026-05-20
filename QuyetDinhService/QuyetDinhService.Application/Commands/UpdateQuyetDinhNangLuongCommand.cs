@@ -9,6 +9,7 @@ namespace QuyetDinhService.QuyetDinhService.Application.Commands
         string NoiDung,
         DateTime NgayHieuLuc,
         string? GhiChu,
-        decimal LuongCoBanMoi
+        decimal LuongCoBanMoi,
+        DateTime UpdatedAt
     ) : IRequest<bool>;
 }

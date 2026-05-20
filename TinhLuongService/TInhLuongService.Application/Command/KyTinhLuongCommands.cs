@@ -18,9 +18,9 @@ namespace TinhLuongService.Application.Command
 
     public record DeleteKyTinhLuongCommand(Guid Id) : IRequest<bool>;
 
-    public record KhoaKyTinhLuongCommand(Guid Id) : IRequest<bool>;
+    public record KhoaKyTinhLuongCommand(Guid Id, DateTime UpdatedAt) : IRequest<bool>;
 
-    public record MoKyTinhLuongCommand(Guid Id) : IRequest<bool>;
+    public record MoKyTinhLuongCommand(Guid Id, DateTime UpdatedAt) : IRequest<bool>;
 
-    public record TinhLuongCommand(Guid Id) : IRequest<bool>;
+    public record TinhLuongCommand(Guid Id, DateTime UpdatedAt) : IRequest<bool>;
 }

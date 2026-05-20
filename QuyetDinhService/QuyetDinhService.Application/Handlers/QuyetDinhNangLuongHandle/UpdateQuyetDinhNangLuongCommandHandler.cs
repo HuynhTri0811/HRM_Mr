@@ -28,7 +28,7 @@ namespace QuyetDinhService.QuyetDinhService.Application.Handlers.QuyetDinhNangLu
             
             entity.CapNhatLuongCoBan(entity.MaNhanVien, entity.LuongCoBanCu, request.LuongCoBanMoi);
 
-            await repository.UpdateAsync(entity);
+            await repository.UpdateAsync(entity, request.UpdatedAt);
             await repository.SaveChangesAsync();
 
             var token = httpContextAccessor.HttpContext?.Request.Headers["Authorization"].ToString() ?? string.Empty;

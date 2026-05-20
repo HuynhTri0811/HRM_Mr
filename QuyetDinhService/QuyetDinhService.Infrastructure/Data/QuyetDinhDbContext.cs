@@ -34,6 +34,14 @@ namespace QuyetDinhService.QuyetDinhService.Infrastructure.Data
                 {
                     modelBuilder.Entity(entityType.ClrType).HasQueryFilter(ConvertFilterExpression(entityType.ClrType));
                 }
+
+                // Cấu hình concurrency token dựa trên UpdatedAt
+                if (typeof(ObjectBase).IsAssignableFrom(entityType.ClrType))
+                {
+                    modelBuilder.Entity(entityType.ClrType)
+                        .Property(nameof(ObjectBase.UpdatedAt))
+                        .IsConcurrencyToken();
+                }
             }
         }
 

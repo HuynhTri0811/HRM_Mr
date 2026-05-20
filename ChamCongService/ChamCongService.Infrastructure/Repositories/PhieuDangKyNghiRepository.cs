@@ -40,8 +40,9 @@ namespace ChamCongService.Infrastructure.Repositories
             await context.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(PhieuDangKyNghi entity)
+        public async Task UpdateAsync(PhieuDangKyNghi entity, DateTime originalUpdatedAt)
         {
+            context.Entry(entity).Property(e => e.UpdatedAt).OriginalValue = originalUpdatedAt;
             context.PhieuDangKyNghis.Update(entity);
             await Task.CompletedTask;
         }

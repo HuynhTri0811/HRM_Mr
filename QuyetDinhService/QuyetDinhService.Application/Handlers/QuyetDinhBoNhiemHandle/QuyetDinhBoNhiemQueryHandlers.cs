@@ -32,7 +32,8 @@ namespace QuyetDinhService.QuyetDinhService.Application.Handlers.QuyetDinhBoNhie
                     qd.ChucVuMoi,
                     qd.PhuCapCu,
                     qd.PhuCapMoi,
-                    qd.LyDo);
+                    qd.LyDo,
+                    qd.UpdatedAt);
             });
 
             return await Task.WhenAll(tasks);
@@ -64,7 +65,8 @@ namespace QuyetDinhService.QuyetDinhService.Application.Handlers.QuyetDinhBoNhie
                 qd.ChucVuMoi,
                 qd.PhuCapCu,
                 qd.PhuCapMoi,
-                qd.LyDo);
+                qd.LyDo,
+                qd.UpdatedAt);
         }
     }
 }

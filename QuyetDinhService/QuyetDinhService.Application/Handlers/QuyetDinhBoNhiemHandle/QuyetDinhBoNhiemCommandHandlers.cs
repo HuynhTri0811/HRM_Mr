@@ -91,7 +91,7 @@ namespace QuyetDinhService.QuyetDinhService.Application.Handlers.QuyetDinhBoNhie
 
             entity.BoNhiem(entity.MaNhanVien, entity.ChucVuCu, request.ChucVuMoi, entity.PhuCapCu, phuCapMoi, request.LyDo);
 
-            await repository.UpdateAsync(entity);
+            await repository.UpdateAsync(entity, request.UpdatedAt);
             await repository.SaveChangesAsync();
 
             await nhanSuServiceClient.UpdateBoNhiemAsync(entity.MaNhanVien, request.ChucVuMoi, phuCapMoi, token);

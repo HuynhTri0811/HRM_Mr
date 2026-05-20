@@ -38,8 +38,9 @@ namespace QuyetDinhService.QuyetDinhService.Infrastructure.Repositories
             await quyetDinhDbContext.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(QuyetDinhBoNhiem entity)
+        public async Task UpdateAsync(QuyetDinhBoNhiem entity, DateTime originalUpdatedAt)
         {
+            quyetDinhDbContext.Entry(entity).Property(e => e.UpdatedAt).OriginalValue = originalUpdatedAt;
             quyetDinhDbContext.QuyetDinhBoNhiems.Update(entity);
             await quyetDinhDbContext.SaveChangesAsync();
         }

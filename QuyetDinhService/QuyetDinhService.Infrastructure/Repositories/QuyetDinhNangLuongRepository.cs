@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using QuyetDinhService.Domain.Entities;
 using QuyetDinhService.QuyetDinhService.Domain.Repositories;
 using QuyetDinhService.QuyetDinhService.Infrastructure.Data;
@@ -38,8 +38,9 @@ namespace QuyetDinhService.QuyetDinhService.Infrastructure.Repositories
             await quyetDinhDbContext.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(QuyetDinhNangLuong entity)
+        public async Task UpdateAsync(QuyetDinhNangLuong entity, DateTime originalUpdatedAt)
         {
+            quyetDinhDbContext.Entry(entity).Property(e => e.UpdatedAt).OriginalValue = originalUpdatedAt;
             quyetDinhDbContext.QuyetDinhNangLuongs.Update(entity);
             await quyetDinhDbContext.SaveChangesAsync();    
         }

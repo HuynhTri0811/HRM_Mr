@@ -36,8 +36,9 @@ namespace ChamCongService.Infrastructure.Repositories
             await context.SaveChangesAsync();
         }
 
-        public async Task UpdateAsync(LoaiChamCong entity)
+        public async Task UpdateAsync(LoaiChamCong entity, DateTime originalUpdatedAt)
         {
+            context.Entry(entity).Property(e => e.UpdatedAt).OriginalValue = originalUpdatedAt;
             context.LoaiChamCongs.Update(entity);
             await Task.CompletedTask;
         }

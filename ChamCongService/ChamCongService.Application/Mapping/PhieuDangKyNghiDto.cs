@@ -15,6 +15,7 @@ namespace ChamCongService.Application.Mapping
             x.LoaiChamCongId,
             x.LoaiChamCong?.TenLoai,
             x.LoaiChamCong?.HinhThuc ?? HinhThucNghi.NghiTheoNgay,
+            x.UpdatedAt,
             (x as PhieuDangKyNghiTheoGio)?.TuGio,
             (x as PhieuDangKyNghiTheoGio)?.DenGio,
             (x as PhieuDangKyNghiTheoBuoi)?.LoaiBuoi);

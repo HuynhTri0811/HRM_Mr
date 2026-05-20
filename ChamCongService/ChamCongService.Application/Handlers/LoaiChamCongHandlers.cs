@@ -27,7 +27,7 @@ namespace ChamCongService.Application.Handlers
             var entity = await repository.GetByIdAsync(request.Id);
             if (entity == null) return false;
             entity.CapNhat(request.MaLoai, request.TenLoai, request.HeSo, request.HinhThuc);
-            await repository.UpdateAsync(entity);
+            await repository.UpdateAsync(entity, request.UpdatedAt);
             await repository.SaveChangesAsync();
             return true;
         }
@@ -44,14 +44,14 @@ namespace ChamCongService.Application.Handlers
         public async Task<IEnumerable<LoaiChamCongDto>> Handle(GetAllLoaiChamCongQuery request, CancellationToken cancellationToken)
         {
             var result = await repository.GetAllAsync();
-            return result.Where(x => x != null).Select(x => new LoaiChamCongDto(x!.Id, x.MaLoai, x.TenLoai, x.HeSo, x.HinhThuc));
+            return result.Where(x => x != null).Select(x => new LoaiChamCongDto(x!.Id, x.MaLoai, x.TenLoai, x.HeSo, x.HinhThuc, x.UpdatedAt));
         }
 
         public async Task<LoaiChamCongDto?> Handle(GetLoaiChamCongByIdQuery request, CancellationToken cancellationToken)
         {
             var x = await repository.GetByIdAsync(request.Id);
             if (x == null) return null;
-            return new LoaiChamCongDto(x.Id, x.MaLoai, x.TenLoai, x.HeSo, x.HinhThuc);
+            return new LoaiChamCongDto(x.Id, x.MaLoai, x.TenLoai, x.HeSo, x.HinhThuc, x.UpdatedAt);
         }
     }
 }

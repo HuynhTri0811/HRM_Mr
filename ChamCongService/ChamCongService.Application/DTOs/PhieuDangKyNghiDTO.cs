@@ -10,6 +10,7 @@ namespace ChamCongService.Application.DTOs
         Guid LoaiChamCongId,
         string? LoaiChamCongTen,
         HinhThucNghi HinhThuc,
+        DateTime UpdatedAt,
         TimeSpan? TuGio = null,
         TimeSpan? DenGio = null,
         LoaiBuoi? LoaiBuoi = null

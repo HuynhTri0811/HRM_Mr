@@ -22,7 +22,8 @@ namespace QuyetDinhService.QuyetDinhService.Application.Commands
         DateTime NgayHieuLuc,
         string? GhiChu,
         Guid ChucVuMoi,
-        string LyDo
+        string LyDo,
+        DateTime UpdatedAt
     ) : IRequest<bool>;
 
     public record DeleteQuyetDinhBoNhiemCommand(Guid Id) : IRequest<bool>;

@@ -52,17 +52,17 @@ namespace ChamCongService.API.Controllers
         }
 
         [HttpPatch("{id}/chot")]
-        public async Task<ActionResult> Chot(Guid id)
+        public async Task<ActionResult> Chot(Guid id, [FromQuery] DateTime updatedAt)
         {
-            var result = await mediator.Send(new ChotBangChamCongCommand(id));
+            var result = await mediator.Send(new ChotBangChamCongCommand(id, updatedAt));
             if (!result) return NotFound();
             return Ok(new { message = "Đã chốt bảng chấm công" });
         }
 
         [HttpPatch("{id}/mo-chot")]
-        public async Task<ActionResult> MoChot(Guid id)
+        public async Task<ActionResult> MoChot(Guid id, [FromQuery] DateTime updatedAt)
         {
-            var result = await mediator.Send(new MoChotBangChamCongCommand(id));
+            var result = await mediator.Send(new MoChotBangChamCongCommand(id, updatedAt));
             if (!result) return NotFound();
             return Ok(new { message = "Đã mở chốt bảng chấm công" });
         }

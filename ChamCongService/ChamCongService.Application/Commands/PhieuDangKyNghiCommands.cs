@@ -19,6 +19,7 @@ namespace ChamCongService.Application.Commands
         string LyDo,
         Guid MaNhanVien,
         Guid LoaiChamCongId,
+        DateTime UpdatedAt,
         TimeSpan? TuGio = null,
         TimeSpan? DenGio = null,
         LoaiBuoi? LoaiBuoi = null
