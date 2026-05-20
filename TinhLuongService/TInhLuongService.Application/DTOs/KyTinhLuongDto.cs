@@ -5,6 +5,7 @@ namespace TinhLuongService.Application.DTOs
         string MaKy,
         DateTime NgayBatDau,
         DateTime NgayKetThuc,
-        bool ChotTinhLuong
+        bool ChotTinhLuong,
+        DateTime UpdatedAt
     );
 }

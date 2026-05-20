@@ -40,7 +40,7 @@ namespace ChamCongService.API.Controllers
             if (id != command.Id) return BadRequest("ID mismatch");
             var result = await mediator.Send(command);
             if (!result) return NotFound();
-            return NoContent();
+            return Ok(new { message = "Đã cập nhật bảng chấm công" });
         }
 
         [HttpDelete("{id}")]
@@ -48,7 +48,7 @@ namespace ChamCongService.API.Controllers
         {
             var result = await mediator.Send(new DeleteBangChamCongTheoThangCommand(id));
             if (!result) return NotFound();
-            return NoContent();
+            return Ok(new { message = "Đã xóa bảng chấm công" });
         }
 
         [HttpPatch("{id}/chot")]
@@ -56,7 +56,7 @@ namespace ChamCongService.API.Controllers
         {
             var result = await mediator.Send(new ChotBangChamCongCommand(id));
             if (!result) return NotFound();
-            return NoContent();
+            return Ok(new { message = "Đã chốt bảng chấm công" });
         }
 
         [HttpPatch("{id}/mo-chot")]
@@ -64,7 +64,7 @@ namespace ChamCongService.API.Controllers
         {
             var result = await mediator.Send(new MoChotBangChamCongCommand(id));
             if (!result) return NotFound();
-            return NoContent();
+            return Ok(new { message = "Đã mở chốt bảng chấm công" });
         }
     }
 }

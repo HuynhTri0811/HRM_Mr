@@ -34,7 +34,7 @@ namespace QuanLyNhanSuMicroservice.QuanLyNhanVien.Infrastructure.Persistence.Dat
             // Tự động lọc các bản ghi đã xóa cho toàn bộ các bảng có dùng ISoftDelete
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
-                if (typeof(IDelete).IsAssignableFrom(entityType.ClrType))
+                if (typeof(IDelete).IsAssignableFrom(entityType.ClrType) && entityType.BaseType == null)
                 {
                     modelBuilder.Entity(entityType.ClrType).HasQueryFilter(ConvertFilterExpression(entityType.ClrType));
                 }

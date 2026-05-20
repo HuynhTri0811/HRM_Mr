@@ -10,7 +10,7 @@ namespace TinhLuongService.Application.Handlers
         public async Task<IEnumerable<KyTinhLuongDto>> Handle(GetAllKyTinhLuongQuery request, CancellationToken cancellationToken)
         {
             var list = await repository.GetAllAsync();
-            return list.Where(x => x != null).Select(x => new KyTinhLuongDto(x!.Id, x.MaKy, x.NgayBatDau, x.NgayKetThuc, x.ChotTinhLuong));
+            return list.Where(x => x != null).Select(x => new KyTinhLuongDto(x!.Id, x.MaKy, x.NgayBatDau, x.NgayKetThuc, x.ChotTinhLuong, x.UpdatedAt));
         }
     }
 
@@ -20,7 +20,7 @@ namespace TinhLuongService.Application.Handlers
         {
             var x = await repository.GetByIdAsync(request.Id);
             if (x == null) return null;
-            return new KyTinhLuongDto(x.Id, x.MaKy, x.NgayBatDau, x.NgayKetThuc, x.ChotTinhLuong);
+            return new KyTinhLuongDto(x.Id, x.MaKy, x.NgayBatDau, x.NgayKetThuc, x.ChotTinhLuong, x.UpdatedAt);
         }
     }
 }

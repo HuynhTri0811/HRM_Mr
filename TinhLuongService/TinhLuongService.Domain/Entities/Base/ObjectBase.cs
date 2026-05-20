@@ -1,4 +1,4 @@
-﻿
+
 using TinhLuongService.Domain.Entities.Interface;
 
 namespace TinhLuongService.Domain.Entities
@@ -16,8 +16,10 @@ namespace TinhLuongService.Domain.Entities
         public ObjectBase()
         {
             Id = Guid.NewGuid();
-            CreatedAt = DateTime.UtcNow;
-            UpdatedAt = DateTime.UtcNow;
+            var now = DateTime.UtcNow;
+            var nowCoarse = new DateTime(now.Ticks - (now.Ticks % TimeSpan.TicksPerMillisecond), DateTimeKind.Utc);
+            CreatedAt = nowCoarse;
+            UpdatedAt = nowCoarse;
             CreatedBy = string.Empty;
             UpdatedBy = string.Empty;
         }
@@ -25,13 +27,15 @@ namespace TinhLuongService.Domain.Entities
         public void Delete(string deletedBy)
         {
             this.IsDeleted = true;
-            DeletedAt = DateTime.UtcNow;
+            var now = DateTime.UtcNow;
+            DeletedAt = new DateTime(now.Ticks - (now.Ticks % TimeSpan.TicksPerMillisecond), DateTimeKind.Utc);
             DeletedBy = deletedBy;
         }
 
         public void Update(string updatedBy)
         {
-            UpdatedAt = DateTime.UtcNow;
+            var now = DateTime.UtcNow;
+            UpdatedAt = new DateTime(now.Ticks - (now.Ticks % TimeSpan.TicksPerMillisecond), DateTimeKind.Utc);
             UpdatedBy = updatedBy;
         }
     }

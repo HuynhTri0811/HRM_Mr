@@ -27,7 +27,7 @@ namespace TinhLuongService.Application.Handlers
             if (entity == null) return false;
 
             entity.UpdateInfo(request.MaKy, request.NgayBatDau, request.NgayKetThuc);
-            await repository.UpdateAsync(entity);
+            await repository.UpdateAsync(entity, request.UpdatedAt);
             await repository.SaveChangesAsync();
             return true;
         }
@@ -54,7 +54,7 @@ namespace TinhLuongService.Application.Handlers
             if (entity == null) return false;
 
             entity.KhoaKy();
-            await repository.UpdateAsync(entity);
+            await repository.UpdateAsync(entity,Common_Date.AddMilliseconds(DateTime.Now));
             await repository.SaveChangesAsync();
             return true;
         }
@@ -68,7 +68,7 @@ namespace TinhLuongService.Application.Handlers
             if (entity == null) return false;
 
             entity.MoKy();
-            await repository.UpdateAsync(entity);
+            await repository.UpdateAsync(entity,Common_Date.AddMilliseconds(DateTime.Now));
             await repository.SaveChangesAsync();
             return true;
         }
@@ -100,7 +100,7 @@ namespace TinhLuongService.Application.Handlers
             )).ToList();
 
             tinhLuongService.TinhLuong(entity, nhanVienTinhLuongs);
-            await repository.UpdateAsync(entity);
+            await repository.UpdateAsync(entity, DateTime.Now );
             await repository.SaveChangesAsync();
             return true;
         }

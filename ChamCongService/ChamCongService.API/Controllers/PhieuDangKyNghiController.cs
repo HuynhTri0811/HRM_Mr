@@ -40,7 +40,7 @@ namespace ChamCongService.API.Controllers
             if (id != command.Id) return BadRequest("ID mismatch");
             var result = await mediator.Send(command);
             if (!result) return NotFound();
-            return NoContent();
+            return Ok(new { message = "Đã cập nhật phiếu đăng ký nghỉ" });
         }
 
         [HttpDelete("{id}")]
@@ -48,7 +48,7 @@ namespace ChamCongService.API.Controllers
         {
             var result = await mediator.Send(new DeletePhieuDangKyNghiCommand(id));
             if (!result) return NotFound();
-            return NoContent();
+            return Ok(new { message = "Đã xóa phiếu đăng ký nghỉ" });
         }
     }
 }

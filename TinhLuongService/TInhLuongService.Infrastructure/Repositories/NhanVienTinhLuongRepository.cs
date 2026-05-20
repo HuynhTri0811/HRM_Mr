@@ -53,5 +53,12 @@ namespace TinhLuongService.Infrastructure.Repositories
             context.NhanVienTinhLuongs.Update(entity);
             await Task.CompletedTask;
         }
+
+        public async Task UpdateAsync(NhanVienTinhLuong entity, DateTime originalUpdatedAt)
+        {
+            context.Entry(entity).Property(e => e.UpdatedAt).OriginalValue = originalUpdatedAt;
+            context.NhanVienTinhLuongs.Update(entity);
+            await Task.CompletedTask;
+        }
     }
 }

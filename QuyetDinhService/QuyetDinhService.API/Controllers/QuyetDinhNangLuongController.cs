@@ -58,7 +58,7 @@ namespace QuyetDinhService.QuyetDinhService.API.Controllers
             {
                 return NotFound();
             }
-            return NoContent();
+            return Ok(new { message = "Đã cập nhật quyết định bổ nhiệm" });
         }
 
         [HttpDelete("{id}")]
@@ -70,7 +70,7 @@ namespace QuyetDinhService.QuyetDinhService.API.Controllers
             {
                 return NotFound();
             }
-            return NoContent();
+            return Ok(new { message = "Đã xóa quyết định bổ nhiệm" });
         }
     }
 }

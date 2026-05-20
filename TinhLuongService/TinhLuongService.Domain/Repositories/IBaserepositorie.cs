@@ -7,7 +7,7 @@ namespace TinhLuongService.Domain.Repositories
         Task<IEnumerable<T?>> GetAllAsync();
         Task<T?> GetByIdAsync(Guid Oid);
         Task AddAsync(T entity);
-        Task UpdateAsync(T entity);
+        Task UpdateAsync(T entity, DateTime originalUpdatedAt);
         Task DeleteAsync(Guid Oid);
         Task SaveChangesAsync();
     }

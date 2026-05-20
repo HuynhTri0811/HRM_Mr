@@ -41,7 +41,7 @@ namespace TinhLuongService.API.Controllers
             if (id != command.Id) return BadRequest("ID mismatch");
             var result = await mediator.Send(command);
             if (!result) return NotFound();
-            return NoContent();
+            return Ok(new { message = "Đã cập nhật kỳ tính lương" });
         }
 
         [HttpDelete("{id}")]
@@ -49,7 +49,7 @@ namespace TinhLuongService.API.Controllers
         {
             var result = await mediator.Send(new DeleteKyTinhLuongCommand(id));
             if (!result) return NotFound();
-            return NoContent();
+            return Ok(new { message = "Đã xóa kỳ tính lương" });
         }
 
         [HttpPatch("{id}/khoa")]

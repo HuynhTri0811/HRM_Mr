@@ -50,7 +50,7 @@ namespace QuyetDinhService.QuyetDinhService.API.Controllers
 
             var result = await _mediator.Send(command);
             if (!result) return NotFound();
-            return NoContent();
+            return Ok(new { message = "Đã cập nhật quyết định bổ nhiệm" });
         }
 
         [HttpDelete("{id}")]
@@ -59,7 +59,7 @@ namespace QuyetDinhService.QuyetDinhService.API.Controllers
             var command = new DeleteQuyetDinhBoNhiemCommand(id);
             var result = await _mediator.Send(command);
             if (!result) return NotFound();
-            return NoContent();
+            return Ok(new { message = "Đã xóa quyết định bổ nhiệm" });
         }
     }
 }

@@ -40,6 +40,7 @@ namespace TinhLuongService.Infrastructure.Repositories
         {
             var entity = await context.KyTinhLuongs.FindAsync(id);
             if (entity == null) return false;
+            context.Entry(entity).Property(e => e.UpdatedAt).OriginalValue = Common_Date.AddMilliseconds(DateTime.Now);
             entity.KhoaKy();
             context.KyTinhLuongs.Update(entity);
             await context.SaveChangesAsync();
@@ -50,6 +51,7 @@ namespace TinhLuongService.Infrastructure.Repositories
         {
             var entity = await context.KyTinhLuongs.FindAsync(id);
             if (entity == null) return false;
+            context.Entry(entity).Property(e => e.UpdatedAt).OriginalValue = Common_Date.AddMilliseconds(DateTime.Now);
             entity.MoKy();
             context.KyTinhLuongs.Update(entity);
             await context.SaveChangesAsync();
@@ -62,8 +64,10 @@ namespace TinhLuongService.Infrastructure.Repositories
         }
 
 
-        public async Task UpdateAsync(KyTinhLuong entity)
+
+        public async Task UpdateAsync(KyTinhLuong entity, DateTime originalUpdatedAt)
         {
+            context.Entry(entity).Property(e => e.UpdatedAt).OriginalValue = originalUpdatedAt;
             context.KyTinhLuongs.Update(entity);
             await Task.CompletedTask;
         }

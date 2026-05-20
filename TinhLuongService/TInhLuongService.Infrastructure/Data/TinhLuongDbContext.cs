@@ -29,12 +29,22 @@ namespace TinhLuongService.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             // Tự động lọc các bản ghi đã xóa cho toàn bộ các bảng có dùng ISoftDelete
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
-                if (typeof(IDelete).IsAssignableFrom(entityType.ClrType))
+                if (typeof(IDelete).IsAssignableFrom(entityType.ClrType) && entityType.BaseType == null)
                 {
                     modelBuilder.Entity(entityType.ClrType).HasQueryFilter(ConvertFilterExpression(entityType.ClrType));
+                }
+
+                // Cấu hình concurrency token dựa trên UpdatedAt
+                if (typeof(ObjectBase).IsAssignableFrom(entityType.ClrType))
+                {
+                    modelBuilder.Entity(entityType.ClrType)
+                        .Property(nameof(ObjectBase.UpdatedAt))
+                        .IsConcurrencyToken();
                 }
             }
         }

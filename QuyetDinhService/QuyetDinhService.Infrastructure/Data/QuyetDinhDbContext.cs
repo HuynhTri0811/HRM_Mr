@@ -2,13 +2,23 @@ using Microsoft.EntityFrameworkCore;
 using QuyetDinhService.Domain.Entities;
 using QuyetDinhService.Domain.Entities.Interface;
 using System.Linq.Expressions;
+using Microsoft.AspNetCore.Http;
+using QuyetDinhService.Common;
 
 namespace QuyetDinhService.QuyetDinhService.Infrastructure.Data
 {
     public class QuyetDinhDbContext : DbContext
     {
-        public QuyetDinhDbContext(DbContextOptions<QuyetDinhDbContext> options) : base(options)
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public QuyetDinhDbContext(DbContextOptions<QuyetDinhDbContext> options, IHttpContextAccessor httpContextAccessor) : base(options)
         {
+            _httpContextAccessor = httpContextAccessor;
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.AddInterceptors(new SoftInterceptor(_httpContextAccessor));
         }
 
 
@@ -20,7 +30,7 @@ namespace QuyetDinhService.QuyetDinhService.Infrastructure.Data
             // Tự động lọc các bản ghi đã xóa cho toàn bộ các bảng có dùng ISoftDelete
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
-                if (typeof(IDelete).IsAssignableFrom(entityType.ClrType))
+                if (typeof(IDelete).IsAssignableFrom(entityType.ClrType) && entityType.BaseType == null)
                 {
                     modelBuilder.Entity(entityType.ClrType).HasQueryFilter(ConvertFilterExpression(entityType.ClrType));
                 }

@@ -12,7 +12,8 @@ namespace TinhLuongService.Application.Command
         Guid Id,
         string MaKy,
         DateTime NgayBatDau,
-        DateTime NgayKetThuc
+        DateTime NgayKetThuc,
+        DateTime UpdatedAt
     ) : IRequest<bool>;
 
     public record DeleteKyTinhLuongCommand(Guid Id) : IRequest<bool>;
